@@ -6,33 +6,25 @@ function StudyPlanForm({ onCreate }) {
 
   async function handleSubmit(event) {
     event.preventDefault();
-
-    await onCreate(planName, Number(plannedHours));
-
-    setPlanName("");
-    setPlannedHours("");
+    const created = await onCreate(planName.trim(), Number(plannedHours));
+    if (created) {
+      setPlanName("");
+      setPlannedHours("");
+    }
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label>計畫名稱：</label>
-        <input
-          type="text"
-          value={planName}
-          onChange={(event) => setPlanName(event.target.value)}
-        />
+        <label htmlFor="plan-name">計畫名稱：</label>
+        <input id="plan-name" type="text" value={planName}
+          onChange={(event) => setPlanName(event.target.value)} required />
       </div>
-
       <div>
-        <label>預計時數：</label>
-        <input
-          type="number"
-          value={plannedHours}
-          onChange={(event) => setPlannedHours(event.target.value)}
-        />
+        <label htmlFor="planned-hours">預計時數：</label>
+        <input id="planned-hours" type="number" min="0" value={plannedHours}
+          onChange={(event) => setPlannedHours(event.target.value)} required />
       </div>
-
       <button type="submit">新增</button>
     </form>
   );
