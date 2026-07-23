@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import StudyPlanDetailPage from "./pages/StudyPlanDetailPage";
 import StudyPlanListPage from "./pages/StudyPlanListPage";
+import "./App.css";
 
-//設定首頁與詳細頁路徑
-function App() {
+export default function App() {
   return (
     <Routes>
       <Route path="/" element={<StudyPlanListPage />} />
@@ -11,5 +11,3 @@ function App() {
     </Routes>
   );
 }
-
-export default App;
