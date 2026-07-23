@@ -1,5 +1,7 @@
+//共同網址
 const API_URL = "http://localhost:5273/api/study-plans";
 
+//Get全部資料 false丟錯誤 成功轉javascript
 export async function getStudyPlans() {
   const response = await fetch(API_URL);
 
@@ -10,6 +12,7 @@ export async function getStudyPlans() {
   return await response.json();
 }
 
+//GetById
 export async function getStudyPlanById(id) {
   const response = await fetch(`${API_URL}/${id}`);
 
@@ -20,6 +23,8 @@ export async function getStudyPlanById(id) {
   return await response.json();
 }
 
+//create
+//Content-Type告訴後端內容是 JSON  JSON.stringify()把 JavaScript 物件轉成 JSON 字串
 export async function createStudyPlan(planName, plannedHours) {
   const response = await fetch(API_URL, {
     method: "POST",
@@ -40,6 +45,7 @@ export async function createStudyPlan(planName, plannedHours) {
   return await response.json();
 }
 
+//Delete
 export async function deleteStudyPlan(id) {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
@@ -50,7 +56,15 @@ export async function deleteStudyPlan(id) {
   }
 }
 
-export async function updateStudyPlan(id, planName, plannedHours) {
+//Update
+//JSON.stringify()修改內容轉成JSON false是修改失敗
+export async function updateStudyPlan(
+  id,
+  planName,
+  plannedHours,
+  actualHours,
+  abandoned,
+) {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
     headers: {
@@ -59,8 +73,8 @@ export async function updateStudyPlan(id, planName, plannedHours) {
     body: JSON.stringify({
       planName,
       plannedHours,
-      actualHours: 0,
-      abandoned: false,
+      actualHours,
+      abandoned,
     }),
   });
 

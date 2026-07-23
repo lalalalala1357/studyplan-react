@@ -3,6 +3,8 @@ function StudyPlanList({ plans, onView }) {
     return <p>目前沒有讀書計畫</p>;
   }
 
+  //把資料轉成列表內容
+  //map()一個一個拿plan的資料
   return (
     <section aria-label="讀書計畫列表">
       {plans.map((plan) => (

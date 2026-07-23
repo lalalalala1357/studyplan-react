@@ -1,21 +1,26 @@
 import { useCallback, useEffect, useState } from "react";
+//useCallback保存錯誤 計畫 編輯, useEffect載入資料, useState保存loadPlan函式
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   deleteStudyPlan,
   getStudyPlanById,
   updateStudyPlan,
 } from "../services/studyPlanApi";
-import StudyPlanEdit from "./StudyPlanEdit";
+import StudyPlanEdit from "../components/StudyPlanEdit";
 
-function StudyPlanDetail() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [plan, setPlan] = useState(null);
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
+//詳細頁元件
+function StudyPlanDetailPage() {
+  //取網址ID 保存資料 訊息 編輯狀態
+  const { id } = useParams(); //編號
+  const navigate = useNavigate(); //切頁面
+  const [plan, setPlan] = useState(null); //讀書計畫
+  const [error, setError] = useState(""); //載入失敗訊息
+  const [message, setMessage] = useState(""); //修改錯誤訊息
+  const [isEditing, setIsEditing] = useState(false); //顯示修改表單
 
-  const loadPlan = useCallback(async () => {
+  //載入讀書計畫 失敗保存錯誤
+  const loadPlan = useCallback(async () => 
+  {
     setError("");
     try {
       setPlan(await getStudyPlanById(id));
@@ -24,11 +29,14 @@ function StudyPlanDetail() {
     }
   }, [id]);
 
-  useEffect(() => {
+  //換頁面 自動載入資料
+  useEffect(() => 
+  {
     loadPlan();
   }, [loadPlan]);
 
-  async function handleUpdate(planId, planName, plannedHours) {
+  //修改送後端 再刷新跟關閉表單
+  async function handleUpdate(planId, planName, plannedHours, abandoned) {
     setMessage("");
     try {
       await updateStudyPlan(
@@ -36,7 +44,7 @@ function StudyPlanDetail() {
         planName,
         plannedHours,
         plan.actualHours,
-        plan.abandoned,
+        abandoned,
       );
       await loadPlan();
       setIsEditing(false);
@@ -46,6 +54,7 @@ function StudyPlanDetail() {
     }
   }
 
+  //刪除計畫 返回首頁
   async function handleDelete() {
     if (!window.confirm(`確定要刪除「${plan.planName}」嗎？`)) return;
 
@@ -58,13 +67,18 @@ function StudyPlanDetail() {
     }
   }
 
+  //失敗顯示錯誤 返回
   if (error) {
     return <main><p role="alert">{error}</p><Link to="/">返回列表</Link></main>;
   }
+
+  //沒載入顯示提示
   if (!plan) {
     return <p>載入中…</p>;
   }
 
+  //詳細頁
+  //可以修改 刪除 回列表
   return (
     <main>
       <h1>讀書計畫詳細資料</h1>
@@ -88,4 +102,4 @@ function StudyPlanDetail() {
   );
 }
 
-export default StudyPlanDetail;
+export default StudyPlanDetailPage;

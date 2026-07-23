@@ -1,9 +1,11 @@
 import { useState } from "react";
 
+//顯示新增表單
 function StudyPlanForm({ onCreate }) {
   const [planName, setPlanName] = useState("");
   const [plannedHours, setPlannedHours] = useState("");
 
+  //送出新增資料 成功再清空
   async function handleSubmit(event) {
     event.preventDefault();
     const created = await onCreate(planName.trim(), Number(plannedHours));
@@ -13,6 +15,7 @@ function StudyPlanForm({ onCreate }) {
     }
   }
 
+  //event.target.value輸入框的內容
   return (
     <form onSubmit={handleSubmit}>
       <div>
