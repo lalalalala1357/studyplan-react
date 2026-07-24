@@ -5,6 +5,20 @@ import StudyPlanForm from "../components/StudyPlanForm";
 import StudyPlanList from "../components/StudyPlanList";
 import { createStudyPlan, getStudyPlans } from "../services/studyPlanApi";
 import { useStudyPlanUiStore } from "../stores/useStudyPlanUiStore";
+import { Input } from "../components/ui/input";
+import { Button } from "../components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import 
+{
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "../components/ui/alert";
 
 export default function StudyPlanListPage() {
   const [message, setMessage] = useState("");
@@ -43,31 +57,64 @@ export default function StudyPlanListPage() {
     .includes(searchText.trim().toLowerCase()))
 
   return (
-    <main><h1>讀書計畫</h1>
-      <StudyPlanForm onCreate={handleCreate} />
-      <div>
-        <label htmlFor="plan-search">
-          搜尋計畫
-        </label>
+    <main className="mx-auto w-full max-w-[1500px] px-4 py-8">
+      <div className="mb-8 text-center">
+        <h1 className="text-4xl font-bold tracking-tight">
+          讀書計畫
+        </h1>
 
-        <input
-        id="plan-search"
-        type="search"
-        value={searchText}
-        onChange = {(event) => setSearchText(event.target.value)}
-        />
-
-        <button
-          type="button"
-          onClick={clearSearch}
-        >
-          清除
-        </button>
-        
-
+        <p className="mt-2 text-muted-foreground">
+      管理你的所有讀書計畫
+        </p>
       </div>
+      <StudyPlanForm onCreate={handleCreate} />
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="text-lg">
+            搜尋讀書計畫
+          </CardTitle>
+        </CardHeader>
 
-      {message && <p role="status">{message}</p>}{error && <p role="alert">{error.message}</p>}<hr />
+        <CardContent>
+          <div className="flex gap-3">
+            <Input
+              id="plan-search"
+              type="search"
+              placeholder="輸入計畫名稱"
+              value={searchText}
+              onChange={(event) =>
+                setSearchText(event.target.value)
+              }
+            />
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={clearSearch}
+            >
+              清除
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {message && (
+        <Alert className="mb-6 border-green-300 bg-green-50">
+          <AlertTitle className="text-green-800">
+            操作完成
+          </AlertTitle>
+          <AlertDescription className="text-green-700">
+            {message}
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {error && (
+        <Alert variant="destructive" className="mb-6">
+          <AlertTitle>載入失敗</AlertTitle>
+          <AlertDescription>{error.message}</AlertDescription>
+        </Alert>
+      )}
       <StudyPlanList plans={filteredPlans} onView={(id) => navigate(`/studyplans/${id}`)} />
     </main>
   );
